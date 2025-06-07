@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Horizontal Scroll Buttons</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+<style>
+  body {
+    margin: 20px;
+    font-family: Arial, sans-serif;
+  }
+  .container {
+    display: flex;
+    align-items: center;
+  }
+  .filters-wrapper {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;  /* IE 10+ */
+    white-space: nowrap;
+    gap: 10px;
+    flex-grow: 1;
+  }
+  .filters-wrapper::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari, Opera */
+  }
+  .filter-btn {
+    flex: 0 0 auto;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+  .scroll-arrow {
+   
+    font-size: 20px;
+    flex-shrink: 0;
+    user-select: none;
+    transition: background-color 0.3s;
+    display: none; /* Hide by default */
+  }
+  .scroll-arrow.visible {
+    display: inline-flex;
+  }
+  .scroll-arrow:hover {
+    background-color: #084298;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <button id="scrollBack" class="scroll-arrow" aria-label="Scroll Left">
+    <i class="fa-solid fa-chevron-left"></i>
+  </button>
+
+  <div class="filters-wrapper" id="filtersWrapper">
+    <button class="filter-btn"><i class="fa-solid fa-fire"></i> Trending</button>
+    <button class="filter-btn"><i class="fa-solid fa-bed"></i> Rooms</button>
+    <button class="filter-btn"><i class="fa-solid fa-mountain-city"></i> Iconic Cities</button>
+    <button class="filter-btn"><i class="fa-solid fa-mountain"></i> Mountains</button>
+    <button class="filter-btn"><i class="fa-solid fa-fort-awesome"></i> Castles</button>
+    <button class="filter-btn"><i class="fa-solid fa-person-swimming"></i> Beachfront</button>
+    <button class="filter-btn"><i class="fa-solid fa-campground"></i> Camping</button>
+    <button class="filter-btn"><i class="fa-solid fa-cow"></i> Farms</button>
+    <button class="filter-btn"><i class="fa-solid fa-snowflake"></i> Arctic</button>
+    <button class="filter-btn"><i class="fa-solid fa-igloo"></i> Domes</button>
+    <button class="filter-btn"><i class="fa-solid fa-ship"></i> Boats</button>
+  </div>
+
+  <button id="scrollForward" class="scroll-arrow" aria-label="Scroll Right">
+    <i class="fa-solid fa-chevron-right"></i>
+  </button>
+</div>
+
+<script>
+  const filtersWrapper = document.getElementById('filtersWrapper');
+  const scrollBack = document.getElementById('scrollBack');
+  const scrollForward = document.getElementById('scrollForward');
+
+  function updateButtons() {
+    const maxScrollLeft = filtersWrapper.scrollWidth - filtersWrapper.clientWidth;
+
+    if (maxScrollLeft > 0) {
+      // Show both buttons if scrollable
+      scrollForward.classList.add('visible');
+
+      // Show back button only if not at extreme left
+      if (filtersWrapper.scrollLeft > 0) {
+        scrollBack.classList.add('visible');
+      } else {
+        scrollBack.classList.remove('visible');
+      }
+
+      // Hide forward button if scrolled fully to right
+      if (filtersWrapper.scrollLeft >= maxScrollLeft - 1) {
+        scrollForward.classList.remove('visible');
+      }
+    } else {
+      // No scrolling needed, hide both
+      scrollBack.classList.remove('visible');
+      scrollForward.classList.remove('visible');
+    }
+  }
+
+  scrollBack.addEventListener('click', () => {
+    filtersWrapper.scrollBy({ left: -150, behavior: 'smooth' });
+  });
+
+  scrollForward.addEventListener('click', () => {
+    filtersWrapper.scrollBy({ left: 150, behavior: 'smooth' });
+  });
+
+  filtersWrapper.addEventListener('scroll', updateButtons);
+  window.addEventListener('resize', updateButtons);
+
+  // Initialize buttons on page load
+  updateButtons();
+</script>
+
+</body>
+</html>
