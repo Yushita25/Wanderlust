@@ -72,10 +72,6 @@ const sessionOptions ={
 
 
 
-
-
-
-
 app.use(session(sessionOptions));
 app.use(flash());
 
@@ -102,11 +98,6 @@ app.use((req,res,next)=>{
  app.use("/", categoryRouter);
 
 
- app.get("/",(req,res)=>{
-    res.send("working")
-  console.log(req.body)
-});
-
 
  app.all(/.*/, (req, res, next) => {
      next(new ExpressError(404, "Page not found!"));
@@ -116,8 +107,6 @@ app.use((err,req,res, next)=>{
     let{statusCode=500, message="somthing went wrong"}=err
     res.status(statusCode).send(message)
 });
-
-
 
 
 app.listen(port,()=>{
